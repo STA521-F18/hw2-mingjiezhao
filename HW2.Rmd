@@ -50,7 +50,8 @@ str(UN3)
 2. What is the mean and standard deviation of each quantitative predictor?  Provide in a nicely formatted table.
 
 ```{r}
-table1=t(as.matrix(rbind(round(apply(UN3[ 1:7],2,mean,na.rm=TRUE),3),round(apply(UN3[ 1:7],2,sd,na.rm=TRUE),3))))
+table1=t(as.matrix(rbind(round(apply(UN3[ 1:7],2,mean,na.rm=TRUE),3),
+                         round(apply(UN3[ 1:7],2,sd,na.rm=TRUE),3))))
 colnames(table1)=c("mean","standard deviation")
 kable(table1,caption = c("mean and standard deviation of the quantitative variables"))
 ```
@@ -177,7 +178,7 @@ car::boxTidwell(ModernC~Pop+PPgdp,~Change+Frate+Fertility+Purban,data=UN3_2)
 
 10.  Are there any outliers or influential points in the data?  Explain.  If so, refit the model after removing any outliers and comment on residual plots.
 \vspace{4mm}
-\newline Answer: Yes I think China and India are two influential points although I did transformation to Pop. So I removed them to check the results of Model 1. The regression results show that after removing the influential points, R-squared values does not change much and sqrt(Pop) becomes a less significant predictor in terms of p-value. But the residual plots and the added variable plots show a better results, especially for Pop. So I think we should remove the points in the regression.
+\newline Answer: Yes I think China and India are two influential points although I did transformation to Pop. So I removed them to check the results of Model 1. The regression results show that after removing the influential points, R-squared values does not change much and sqrt(Pop) becomes a less significant predictor in terms of p-value. But the residual plots and the added variable plots show better results, especially for Pop. So I think we should remove the points in the regression.
 ```{r}
 # remove outliers
 ouliers=c("China","India")
@@ -190,8 +191,10 @@ plot(model_1rm,ask=F)
 par(mfrow=c(2,2))
 avPlots(model_1rm)
 #check termplot
-termplot(model_1,term="sqrt(Pop)",xlabs="Pop with outliers",partial.resid=T, se=T, rug=T,smooth=panel.smooth)
-termplot(model_1rm,term="sqrt(Pop)",xlabs="Pop after outliers removed",partial.resid=T, se=T, rug=T,smooth=panel.smooth)
+termplot(model_1,term="sqrt(Pop)",xlabs="Pop with outliers",partial.resid=T, 
+         se=T, rug=T,smooth=panel.smooth)
+termplot(model_1rm,term="sqrt(Pop)",xlabs="Pop after outliers removed",partial.resid=T, 
+         se=T, rug=T,smooth=panel.smooth)
 ```
 
 ## Summary of Results
@@ -201,8 +204,8 @@ termplot(model_1rm,term="sqrt(Pop)",xlabs="Pop after outliers removed",partial.r
 \newline Answer: ModernC positively correlates to all predictors except Fertility and Purban. 
 \newline 1) For predictors Change and Frate, when keep other predictors unchanged, one unit increase in the predictors would result in 4.838 and 0.182 unit increase in the response variable ModernC, respectively.
 \newline 2) For predictors Fertility and Purban, when keep other predictors unchanged, one unit increase in the predictors would result in 9.319 and 0.029 unit decrease in the response variable ModernC, respectively.
-\newline 3) For PPgdp, when keep other predictors unchanged, 10% increase in the predictor would result in $5.183*log(1.1)$ unit increase in the response variable ModernC
-\newline 4) For Pop, when keep other predictors unchanged, 10% unit increase in the predictor would result in $0.024*sqrt(1.1)$ unit increase in the response variable ModernC
+\newline 3) For PPgdp, when keep other predictors unchanged, 10% increase in the predictor would result in $5.183*log(1.1)=0.494$ unit increase in the response variable ModernC
+\newline 4) For Pop, when keep other predictors unchanged, 10% unit increase in the predictor would result in $0.024*sqrt(1.1)=0.025$ unit increase in the response variable ModernC
 
 ```{r}
 
@@ -237,7 +240,7 @@ since the terms $[x_i'(I-H)x_i]'$ and $x_i'(I-H)Y$ are both scalars, we can move
 $$x_i'(I-H)Y=x_i'\hat{\beta_0}+x_i'(I-H)x_i[x_i'(I-H)x_i]'x_i'(I-H)Y$$
 $$x_i'(I-H)Y=x_i'\hat{\beta_0}+x_i'(I-H)Y$$
 $$0=x_i'\hat{\beta_0}$$
-The above equation is valid for a random $x_i$ so $\hat{\beta_0}=0$
+The above equation is valid for any random $x_i$, so $\hat{\beta_0}$ has to be 0.
 
 14. For multiple regression with more than 2 predictors, say a full model given by `Y ~ X1 + X2 + ... Xp`   we create the added variable plot for variable `j` by regressing `Y` on all of the `X`'s except `Xj` to form `e_Y` and then regressing `Xj` on all of the other X's to form `e_X`.  Confirm that the slope in a manually constructed added variable plot for one of the predictors  in Ex. 10 is the same as the estimate from your model. 
 \vspace{4mm}
